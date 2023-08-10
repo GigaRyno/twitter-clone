@@ -1,10 +1,14 @@
-import { log } from "console";
+import axios from "axios";
 import { useCallback, useState } from "react";
-import Model from "../Model";
-import Input from "../input";
+import { toast } from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 import useLoginModel from "@/hooks/useLoginModel";
 import useRegisterModel from "@/hooks/useRegisterModel";
+
+import Model from "../Model";
+import Input from "../input";
+
 
 const RegisterModel = () => {
     const loginModel = useLoginModel();
@@ -27,15 +31,25 @@ const RegisterModel = () => {
         try {
             setIsLoading(true);
 
-            //TODO ADD REGISTER & LOG IN
+            await axios.post('/api/register', {
+                email,
+                password,
+                username,
+                name,
+            });
+
+            toast.success('Account created successfully!');
+
+            signIn('credentials', {email, password});
 
             registerModel.onClose();
         } catch (error) {
             console.log(error);
+            toast.error("Something went wrong!");
         } finally {
             setIsLoading(false);
         }
-    }, [registerModel]);
+    }, [registerModel, email, password, username, name]);
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -59,6 +73,7 @@ const RegisterModel = () => {
             />
             <Input
                 placeholder="Password"
+                type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 disabled={isLoading}
