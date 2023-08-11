@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Model from "../Model";
 import Input from "../input";
+import ImageUpload from "../ImageUpload";
 
 const EditModel = () => {
     const { data: currentUser } = useCurrentUser();
@@ -53,6 +54,18 @@ const EditModel = () => {
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
+            <ImageUpload
+                value={profileImage}
+                disabled={isLoading}
+                onChange={(image) => setProfileImage(image)}
+                label="Upload Profile Image"
+            />
+            <ImageUpload
+                value={coverImage}
+                disabled={isLoading}
+                onChange={(image) => setCoverImage(image)}
+                label="Upload Cover Image"
+            />
             <Input
                 placeholder="Name"
                 onChange={(e) => setName(e.target.value)}
