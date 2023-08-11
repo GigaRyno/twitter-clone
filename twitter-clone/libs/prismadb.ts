@@ -5,6 +5,7 @@ declare global {
 }
 
 const client = global.prisma || new PrismaClient();
-if(process.env.NODE_ENV === "development") global.prisma = client;
+if(process.env.NODE_ENV === "development") 
+    global.prisma = client;
 
 export default client;

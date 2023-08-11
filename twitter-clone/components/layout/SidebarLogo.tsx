@@ -19,7 +19,7 @@ const SidebarLogo = () => {
         cursor-pointer
         transition
         ">
-            <BsTwitter size={28} color="white"/>
+            <BsTwitter size={28} color="skyblue"/>
         </div>
     );
 }
