@@ -29,6 +29,7 @@ model User {
   posts Post[]
   comments Comment[]
   notifications Notification[]
+  retweets Retweet[]
 }
 
 model Post {
@@ -42,6 +43,7 @@ model Post {
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   comments Comment[]
+  retweets Retweet[]
 }
 
 model Comment {
@@ -65,3 +67,12 @@ model Notification {
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Retweet {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String? @db.ObjectId
+  postId String? @db.ObjectId
+  createdAt DateTime? @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post? @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

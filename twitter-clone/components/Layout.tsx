@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
                         col-span-3
                         lg:col-span-2
                         border-x-[1px]
-                        border-color-neutral-800
+                        border-color-neutral-700
                         ">
                         {children}
                     </div>
@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
 export default Layout;
