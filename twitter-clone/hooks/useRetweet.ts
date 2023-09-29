@@ -7,20 +7,20 @@ import useLoginModel from "./useLoginModel";
 import usePost from "./usePost";
 import usePosts from "./usePosts";
 
-const useLike = ({ postId, userId }: { postId: string, userId?: string }) => {
+const useRetweet = ({ postId, userId }: { postId: string, userId?: string }) => {
   const { data: currentUser } = useCurrentUser();
   const { data: fetchedPost, mutate: mutateFetchedPost } = usePost(postId);
   const { mutate: mutateFetchedPosts } = usePosts(userId);
 
   const loginModel = useLoginModel();
 
-  const hasLiked = useMemo(() => {
-    const list = fetchedPost?.likedIds || [];
+  const hasRetweeted = useMemo(() => {
+    const list = fetchedPost?.retweetIds || [];
 
     return list.includes(currentUser?.id);
   }, [fetchedPost, currentUser]);
 
-  const like = useCallback(async () => {
+  const retweet = useCallback(async () => {
     if (!currentUser) {
       return loginModel.onOpen();
     }
@@ -28,26 +28,26 @@ const useLike = ({ postId, userId }: { postId: string, userId?: string }) => {
     try {
       let request;
 
-      if (hasLiked) {
-        request = () => axios.delete('/api/like', { data: { postId } });
+      if (hasRetweeted) {
+        request = () => axios.delete('/api/retweet', { data: { postId } });
       } else {
-        request = () => axios.post('/api/like', { postId });
+        request = () => axios.post('/api/retweet', { postId });
       }
 
       await request();
       mutateFetchedPost();
       mutateFetchedPosts();
 
-      toast.success(hasLiked ? 'Unliked' : 'Liked');
+      toast.success(hasRetweeted ? 'UnRetweeted' : 'Retweeted');
     } catch (error) {
       toast.error('Something went wrong');
     }
-  }, [currentUser, hasLiked, postId, mutateFetchedPosts, mutateFetchedPost, loginModel]);
+  }, [currentUser, hasRetweeted, postId, mutateFetchedPosts, mutateFetchedPost, loginModel]);
 
   return {
-    hasLiked,
-    like,
+    hasRetweeted,
+    retweet,
   }
 }
 
-export default useLike;
+export default useRetweet;

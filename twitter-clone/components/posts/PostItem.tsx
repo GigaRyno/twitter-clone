@@ -8,6 +8,7 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 
 import Avatar from '../Avatar';
 import useLike from '@/hooks/useLike';
+import useRetweet from '@/hooks/useRetweet';
 interface PostItemProps {
   data: Record<string, any>;
   userId?: string;
@@ -19,7 +20,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
     const { data: currentUser } = useCurrentUser();
     const { hasLiked, like } = useLike({postId: data.id, userId});
-    // const { hasRetweet, retweet } = useRetweet({postId: data.id, userId});
+    const { hasRetweeted, retweet } = useRetweet({postId: data.id, userId});
 
     const goToUser = useCallback((event: any) => {
         event.stopPropagation();
@@ -46,6 +47,8 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
         if (!currentUser)
             return loginModel.onOpen();
+        retweet();
+
     }, [loginModel, currentUser]);
 
     const createdAt = useMemo(() => {
@@ -57,7 +60,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
     const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
     const onLikeColor = hasLiked ? 'red' : '';
-    // const onRetweetColor = hasRetweet ? 'green' : '';
+    const onRetweetColor = hasRetweeted ? 'green' : '';
 
     return (
         <div 
@@ -148,7 +151,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                                 transition 
                                 hover:text-green-500
                         ">
-                            <AiOutlineRetweet size={20} />
+                            <AiOutlineRetweet size={20} color={onRetweetColor} />
                             <p>
                                 {data.retweets?.length || 0}
                             </p>
