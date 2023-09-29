@@ -7,7 +7,7 @@ import axios from "axios";
 
 const useFollow = (userId: string) => {
     const { data: currentUser, mutate: mutateCurrentUser } = useCurrentUser();
-    const { mutate: mutateFetchedUser } = useUser(userId);
+    const { data: fetchedUser, mutate: mutateFetchedUser } = useUser(userId);
 
     const loginModel = useLoginModel();
 
@@ -30,9 +30,9 @@ const useFollow = (userId: string) => {
             }
 
             await request();
-
             mutateCurrentUser();
             mutateFetchedUser();
+            toast.success(isFollowing ? `Unfollowed @${fetchedUser?.username}` : `Now Following @${fetchedUser?.username}`);
 
         } catch (err) {
             console.log(err);
@@ -40,7 +40,6 @@ const useFollow = (userId: string) => {
         }
 
     }, [currentUser, isFollowing, userId, mutateCurrentUser, mutateFetchedUser, loginModel]);
-
     return { isFollowing, follow}
 }
 

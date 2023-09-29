@@ -7,6 +7,7 @@ import useLoginModel from '@/hooks/useLoginModel';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
 import Avatar from '../Avatar';
+import useLike from '@/hooks/useLike';
 interface PostItemProps {
   data: Record<string, any>;
   userId?: string;
@@ -14,9 +15,11 @@ interface PostItemProps {
 
 const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
     const router = useRouter();
-    const loginModal = useLoginModel();
+    const loginModel = useLoginModel();
 
     const { data: currentUser } = useCurrentUser();
+    const { hasLiked, like } = useLike({postId: data.id, userId});
+    // const { hasRetweet, retweet } = useRetweet({postId: data.id, userId});
 
     const goToUser = useCallback((event: any) => {
         event.stopPropagation();
@@ -31,16 +34,19 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
         event.stopPropagation();
 
         if (!currentUser)
-            return loginModal.onOpen();
-    }, [loginModal, currentUser]);
+            return loginModel.onOpen();
+
+        like();
+
+    }, [loginModel, currentUser, like]);
 
     // Filler info for now will redo later
     const onRetweet = useCallback(async (event: any) => {
         event.stopPropagation();
 
         if (!currentUser)
-            return loginModal.onOpen();
-    }, [loginModal, currentUser]);
+            return loginModel.onOpen();
+    }, [loginModel, currentUser]);
 
     const createdAt = useMemo(() => {
         if (!data?.createdAt)
@@ -48,6 +54,10 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
         return formatDistanceToNowStrict(new Date(data.createdAt));
     }, [data.createdAt])
+
+    const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
+    const onLikeColor = hasLiked ? 'red' : '';
+    // const onRetweetColor = hasRetweet ? 'green' : '';
 
     return (
         <div 
@@ -105,13 +115,12 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                                 transition 
                                 hover:text-red-500
                         ">
-                            <AiOutlineHeart size={20} />
+                            <LikeIcon size={20} color={onLikeColor}/>
                             <p>
-                                {data.likedIds.length}
+                                {data.likedIds?.length}
                             </p>
                         </div>
                         <div 
-                        onClick={onLike}
                         className="
                             flex 
                             flex-row 
@@ -122,10 +131,10 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                             transition 
                             hover:text-sky-500
                         ">
-                        <AiOutlineMessage size={20} />
-                        <p>
-                            {data.comments?.length || 0}
-                        </p>
+                            <AiOutlineMessage size={20} />
+                            <p>
+                                {data.comments?.length || 0}
+                            </p>
                         </div>
                         <div
                             onClick={onRetweet}
@@ -141,7 +150,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                         ">
                             <AiOutlineRetweet size={20} />
                             <p>
-                                {data.likedIds.length}
+                                {data.retweets?.length || 0}
                             </p>
                         </div>
                     </div>

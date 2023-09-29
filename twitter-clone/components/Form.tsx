@@ -3,12 +3,11 @@ import useLoginModel from "@/hooks/useLoginModel";
 import usePosts from "@/hooks/usePosts";
 import useRegisterModel from "@/hooks/useRegisterModel";
 import axios from "axios";
-import { set } from "date-fns";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import Button from "./Button";
 import Avatar from "./Avatar";
-import { is } from "date-fns/locale";
+import usePost from "@/hooks/usePost";
 
 interface FormProps {
     placeholder: string;
@@ -16,16 +15,13 @@ interface FormProps {
     postId?: string;
 }
 
-const Form: React.FC<FormProps> = ({
-    placeholder,
-    isComment,
-    postId
-}) => {
+const Form: React.FC<FormProps> = ({placeholder, isComment, postId}) => {
     const registerModel = useRegisterModel();
     const loginModel = useLoginModel();
 
     const { data: currentUser } = useCurrentUser();
-    const { mutate: mutatePosts } = usePosts();
+    const { mutate: mutatePosts } = usePosts(postId as string);
+    const { mutate: mutatePost } = usePost(postId as string);
 
     const [body, setBody] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -34,19 +30,20 @@ const Form: React.FC<FormProps> = ({
         try {
             setIsLoading(true);
 
-            await axios.post('/api/posts', { body });
+            const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
+
+            await axios.post(url, { body });
 
             toast.success('Tweeted successfully!');
-
             setBody('');
             mutatePosts();
-
+            mutatePost();
         } catch (error) {
             toast.error('Something went wrong');   
         } finally {
             setIsLoading(false);
         }
-    }, [body, mutatePosts]);
+    }, [body, mutatePosts, isComment, postId]);
 
     return (
         <div className="border-b-[1px] border-neutral-800 px-5 py-2">
@@ -85,12 +82,7 @@ const Form: React.FC<FormProps> = ({
                             transition
                             "/>
                             <div className="mt-4 flex flex-row justify-end">
-                                <Button 
-                                    disabled={isLoading || !body}
-                                    label="Tweet"
-                                    onClick={onSubmit}
-                                />
-
+                                <Button disabled={isLoading || !body} label="Tweet" onClick={onSubmit}/>
                             </div>
                     </div>
                 </div>
@@ -100,7 +92,6 @@ const Form: React.FC<FormProps> = ({
                     <div className="flex flex-row items-center justify-center gap-4">
                         <Button label="Login" onClick={loginModel.onOpen}/>
                         <Button label="Register" onClick={registerModel.onOpen} secondary/>
-
                     </div>
                 </div>
             )}
