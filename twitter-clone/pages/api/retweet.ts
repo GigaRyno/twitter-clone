@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
 import prisma from '@/libs/prismadb';
 import serverAuth from "@/libs/serverAuth";
 
@@ -24,16 +23,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     let updatedRetweetedIds = [...(post.retweetedIds || [])];
 
-    if (req.method === 'POST')
-    updatedRetweetedIds.push(currentUser.id);   
+    if (req.method === 'POST') {
+      updatedRetweetedIds.push(currentUser.id);   
+      console.log('POST -- UPDATED RETWEETED IDS', updatedRetweetedIds);
+    }
 
-    if (req.method === 'DELETE')
-    updatedRetweetedIds = updatedRetweetedIds.filter((retweetedId) => retweetedId !== currentUser?.id);
+    if (req.method === 'DELETE') {
+      updatedRetweetedIds = updatedRetweetedIds.filter((retweetedId) => retweetedId !== currentUser?.id);
+      console.log('DELETE -- UPDATED RETWEETED IDS', updatedRetweetedIds);
+    }
 
     const updatedPost = await prisma.post.update({
       where: {id: postId},
-      data: {retweetedIds: updatedRetweetedIds}
+      data: {retweetedIds: updatedRetweetedIds},
     });
+     console.log("UPDATED POST", updatedPost);
 
     return res.status(200).json(updatedPost);
   } catch (error) {

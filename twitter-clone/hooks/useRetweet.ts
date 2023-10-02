@@ -15,7 +15,12 @@ const useRetweet = ({ postId, userId }: { postId: string, userId?: string }) => 
   const loginModel = useLoginModel();
 
   const hasRetweeted = useMemo(() => {
-    const list = fetchedPost?.retweetIds || [];
+    const list = fetchedPost?.retweetedIds || [];
+
+    console.log('LIST', list);
+    console.log('CURRENT USER', currentUser?.id);
+    console.log('HAS RETWEETED', list.includes(currentUser?.id));
+    console.log('Fetched Post', fetchedPost);
 
     return list.includes(currentUser?.id);
   }, [fetchedPost, currentUser]);
@@ -27,6 +32,10 @@ const useRetweet = ({ postId, userId }: { postId: string, userId?: string }) => 
 
     try {
       let request;
+
+      if(currentUser.id == fetchedPost?.userId) {
+        return toast.error('You cannot retweet your own post');
+      }
 
       if (hasRetweeted) {
         request = () => axios.delete('/api/retweet', { data: { postId } });

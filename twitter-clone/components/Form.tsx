@@ -2,8 +2,10 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useLoginModel from "@/hooks/useLoginModel";
 import usePosts from "@/hooks/usePosts";
 import useRegisterModel from "@/hooks/useRegisterModel";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 import axios from "axios";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Button from "./Button";
 import Avatar from "./Avatar";
@@ -23,6 +25,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, postId}) => {
     const { mutate: mutatePosts } = usePosts(postId as string);
     const { mutate: mutatePost } = usePost(postId as string);
 
+    const [percentage, setPercentage] = useState(0);
     const [body, setBody] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -45,6 +48,52 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, postId}) => {
         }
     }, [body, mutatePosts, isComment, postId]);
 
+    const getProgressbarStyle = () => {
+        if (body.length > 0 && body.length < 80) {
+          return buildStyles({
+            rotation: 0,
+            strokeLinecap: "butt",
+            pathTransitionDuration: 0,
+            trailColor: "#2F3336",
+            pathColor: "#1D9BF0",
+          });
+        }
+        if (body.length >= 80 && body.length < 100) {
+          return buildStyles({
+            rotation: 0,
+            strokeLinecap: "butt",
+            pathTransitionDuration: 0,
+            textSize: "40px",
+            textColor: "#71767b",
+            trailColor: "#2F3336",
+            pathColor: "#FFD400",
+          });
+        }
+        if (body.length >= 100) {
+          return buildStyles({
+            rotation: 0,
+            strokeLinecap: "butt",
+            pathTransitionDuration: 0,
+            textSize: "40px",
+            textColor: "#F4212E",
+            trailColor: "#2F3336",
+            pathColor: "#F4212E",
+          });
+        }
+      };
+    
+      useEffect(() => {
+        const calculatePercentage = () => {
+          const currentLength = body.length;
+          const maxLength = 100;
+          const calculatedPercentage = (currentLength / maxLength) * 100;
+    
+          setPercentage(calculatedPercentage);
+        };
+    
+        calculatePercentage();
+      }, [body]);
+
     return (
         <div className="border-b-[1px] border-neutral-800 px-5 py-2">
             {currentUser ? (
@@ -53,26 +102,13 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, postId}) => {
                         <Avatar userId={currentUser?.id}/>
                     </div>
                     <div className="w-full">
-                        <textarea 
-                            disabled={isLoading}
-                            onChange={(e) => setBody(e.target.value)}
-                            value={body}
-                            className="
-                                disabled:opacity-80
-                                peer
-                                resize-none
-                                mt-3
-                                w-full
-                                bg-black
-                                ring-0
-                                outline-none
-                                text-[20px]
-                                placeholder-neutral-500
-                                text-white
-                            "
+                        <textarea
+                            className="w-full resize-none outline-none bg-black mt-4 text-xl text-white placeholder-neutral-500 peer scrollbar-thin  scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 scrollbar-thumb-rounded-md scrollbar-track-rounded-sm"
                             placeholder={placeholder}
-                            >
-                        </textarea>
+                            value={body}
+                            onChange={(event) => setBody(event.target.value)}
+                            maxLength={150}
+                        ></textarea>
                         <hr className="
                             opacity-0
                             peer-focus:opacity-100
@@ -82,6 +118,22 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, postId}) => {
                             transition
                             "/>
                             <div className="mt-4 flex flex-row justify-end">
+                                <div className="flex items-center px-5 cursor-pointer">
+                                    {body.length > 0 && body.length < 80 && body.trim() ? (
+                                        <CircularProgressbar
+                                            className="w-5 h-5 ease-in duration-300"
+                                            value={percentage}
+                                            styles={getProgressbarStyle()}
+                                        />
+                                    ) : body.length >= 80 && body.trim() ? (
+                                        <CircularProgressbar
+                                            className="w-7 h-7 text-center ease-out duration-300"
+                                            value={percentage}
+                                            styles={getProgressbarStyle()}
+                                            text={`${100 - body.length}`}
+                                        />
+                                    ) : null}
+                                </div>
                                 <Button disabled={isLoading || !body} label="Tweet" onClick={onSubmit}/>
                             </div>
                     </div>

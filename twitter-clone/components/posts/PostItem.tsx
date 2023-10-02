@@ -151,7 +151,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                                 transition 
                                 hover:text-green-500
                         ">
-                            <AiOutlineRetweet size={20} color={onRetweetColor} />
+                            <AiOutlineRetweet size={20}  />
                             <p>
                                 {data.retweets?.length || 0}
                             </p>
