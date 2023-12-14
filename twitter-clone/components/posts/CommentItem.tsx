@@ -18,12 +18,11 @@ const CommentItem: React.FC<CommentItemProps> = ({ data }) => {
   }, [router, data.user.id]);
 
   const createdAt = useMemo(() => {
-    if (!data?.createdAt) {
-      return null;
-    }
+    if (!data?.createdAt)
+        return null;
 
-    return formatDistanceToNowStrict(new Date(data.createdAt));
-  }, [data.createdAt])
+    return data.createdAt.split('T')[0].split('-')[1] + '/' + data.createdAt.split('T')[0].split('-')[2] + '/' + data.createdAt.split('T')[0].split('-')[0]
+}, [data.createdAt])
 
   return (
     <div 

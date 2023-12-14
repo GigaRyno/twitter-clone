@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineRetweet } from 'react-icons/ai';
-import { formatDistanceToNowStrict } from 'date-fns';
 
 import useLoginModel from '@/hooks/useLoginModel';
 import useCurrentUser from '@/hooks/useCurrentUser';
@@ -49,13 +48,13 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
             return loginModel.onOpen();
         retweet();
 
-    }, [loginModel, currentUser]);
+    }, [loginModel, currentUser, retweet]);
 
     const createdAt = useMemo(() => {
         if (!data?.createdAt)
             return null;
 
-        return formatDistanceToNowStrict(new Date(data.createdAt));
+        return data.createdAt.split('T')[0].split('-')[1] + '/' + data.createdAt.split('T')[0].split('-')[2] + '/' + data.createdAt.split('T')[0].split('-')[0]
     }, [data.createdAt])
 
     const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
@@ -151,7 +150,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                                 transition 
                                 hover:text-green-500
                         ">
-                            <AiOutlineRetweet size={20}  />
+                            <AiOutlineRetweet size={20} color={onRetweetColor} />
                             <p>
                                 {data.retweets?.length || 0}
                             </p>

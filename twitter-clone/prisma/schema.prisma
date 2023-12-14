@@ -25,7 +25,6 @@ model User {
   updatedAt DateTime? @updatedAt
   followingIds String[] @db.ObjectId
   hasNotifications Boolean?
-
   posts Post[]
   comments Comment[]
   notifications Notification[]
@@ -40,9 +39,7 @@ model Post {
   userId String? @db.ObjectId
   likedIds String[] @db.ObjectId
   retweetedIds String[] @db.ObjectId
-
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   comments Comment[]
   retweets Retweet[]
 }
@@ -52,11 +49,10 @@ model Comment {
   body String
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
-  userId String? @db.ObjectId
-  postId String? @db.ObjectId
-
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @db.ObjectId
   post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String? @db.ObjectId
 }
 
 model Notification {
@@ -64,18 +60,17 @@ model Notification {
   body String
   userId String? @db.ObjectId
   createdAt DateTime? @default(now())
-
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Retweet {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  body String //implement retweet body later on
-  userId String? @db.ObjectId
-  postId String? @db.ObjectId
+  body String
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
-
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String? @db.ObjectId
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @db.ObjectId
+  retweetedIds String[] @db.ObjectId
 }

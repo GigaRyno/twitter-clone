@@ -14,10 +14,11 @@ import usePost from "@/hooks/usePost";
 interface FormProps {
     placeholder: string;
     isComment?: boolean;
+    isRetweet?: boolean;
     postId?: string;
 }
 
-const Form: React.FC<FormProps> = ({placeholder, isComment, postId}) => {
+const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) => {
     const registerModel = useRegisterModel();
     const loginModel = useLoginModel();
 
@@ -33,7 +34,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, postId}) => {
         try {
             setIsLoading(true);
 
-            const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
+            const url = isComment ? `/api/comments?postId=${postId}` : isRetweet ? `/api/retweet?postId=${postId}` : '/api/posts';
 
             await axios.post(url, { body });
 
@@ -103,7 +104,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, postId}) => {
                     </div>
                     <div className="w-full">
                         <textarea
-                            className="w-full resize-none outline-none bg-black mt-4 text-xl text-white placeholder-neutral-500 peer scrollbar-thin  scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 scrollbar-thumb-rounded-md scrollbar-track-rounded-sm"
+                            className="w-full resize-none outline-none bg-neutral-900 mt-4 text-xl text-white placeholder-neutral-500 peer scrollbar-thin  scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 scrollbar-thumb-rounded-md scrollbar-track-rounded-sm"
                             placeholder={placeholder}
                             value={body}
                             onChange={(event) => setBody(event.target.value)}
