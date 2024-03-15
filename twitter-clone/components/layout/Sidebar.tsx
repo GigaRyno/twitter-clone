@@ -7,7 +7,10 @@ import Sticky from 'react-stickynode';
 import SidebarLogo from './SidebarLogo';
 import SidebarItem from './SidebarItem';
 import SidebarTweetButton from './SidebarTweetButton';
+import SidebarAccountButton from './SidebarAccountButton';
 import useCurrentUser from '@/hooks/useCurrentUser';
+
+const SideAccouuntButton = () => {};
 
 const Sidebar = () => {
         const { data: currentUser } = useCurrentUser();  
@@ -28,36 +31,38 @@ const Sidebar = () => {
             href: `/users/${currentUser?.id}`,
             icon: FaUser,
             auth: true
-        }
+        },
     ];
     
     return (
     <Sticky>
-        <div className="col-span h-full pr-4 md:pr-6">
+        <div className="col-auto h-screen pr-4 md:pr-6">
             <div className="flex flex-col items-end">
                 <div className="space-y-2 lg:w-[230px]">
-                    
-                        <SidebarLogo/>
-                        {items.map((item) => (
-                            <SidebarItem
-                                key={item.href}
-                                href={item.href}
-                                label={item.label}
-                                icon={item.icon}
-                                auth={item.auth}
-                            />
-                        ))}
-                        {currentUser && (
-                            <SidebarItem onClick={() => signOut()} icon={BiLogOut} label='Logout'/>
-                        )}
-                        <SidebarTweetButton/>
+                    <SidebarLogo/>
+                    {items.map((item) => (
+                        <SidebarItem
+                            key={item.href}
+                            href={item.href}
+                            label={item.label}
+                            icon={item.icon}
+                            auth={item.auth}
+                        />
+                    ))}
+                    <SidebarTweetButton/>
                 </div>
             </div>
-            <div className="flex flex-col-reverse items-start">
-                <p className='text-red'>TEST</p>
+            <div className='lg:h-3/4 md:h-2/5 flex flex-end items-end'>
+                {/* <div className='flex flex-col'> */}
+                    {/* move the button down to the bottom */}
+                    {currentUser && (
+                        <SidebarAccountButton label={currentUser?.name}/>
+                        
+                    )}
+                {/* </div> */}
             </div>
         </div>
-        </Sticky>
+    </Sticky>
     );
 }
 

@@ -17,17 +17,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const post = await prisma.post.create({
         data: {
           body,
-          userId: currentUser.id
+          userId: currentUser.id,
         }
       });
-
       return res.status(200).json(post);
     }
 
     if (req.method === 'GET') {
       const { userId } = req.query;
-
-      console.log({ userId })
 
       let posts;
 
@@ -38,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
           include: {
             user: true,
-            comments: true
+            comments: true,
           },
           orderBy: {
             createdAt: 'desc'
@@ -48,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         posts = await prisma.post.findMany({
           include: {
             user: true,
-            comments: true
+            comments: true,
           },
           orderBy: {
             createdAt: 'desc'

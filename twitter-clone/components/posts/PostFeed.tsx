@@ -1,7 +1,6 @@
 import usePosts from '@/hooks/usePosts';
-import PostItem from './PostItem';
-import RetweetItem from './RetweetItem';
-import useRetweet from '@/hooks/useRetweet';
+import PostContainer from './PostContainer';
+import useRetweets from '@/hooks/useRetweetPosts';
 
 interface PostFeedProps {
     userId?: string;
@@ -9,13 +8,15 @@ interface PostFeedProps {
 
 const PostFeed: React.FC<PostFeedProps> = ({ userId }) => {
     const { data: posts = [] } = usePosts(userId);
+    const { data: retweets = [] } = useRetweets(userId);
+
+    // sorts the posts and retweets by date
+    const sortedPosts = [...posts, ...retweets].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
     return (
         <>
-            {posts.map((post: Record<string, any>,) => (
-                <RetweetItem userId={userId} key={post.id} data={post}/>
-            ))}
-            {posts.map((post: Record<string, any>,) => (
-                <PostItem userId={userId} key={post.id} data={post}/>
+            {sortedPosts.map((post: Record<string, any>) => (
+                <PostContainer userId={post.userId} key={post.id} data={post}/>
             ))}
         </>
     )

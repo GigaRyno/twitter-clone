@@ -40,7 +40,7 @@ const useFollow = (userId: string) => {
         }
 
     }, [currentUser, isFollowing, userId, mutateCurrentUser, mutateFetchedUser, loginModel]);
-    return { isFollowing, follow}
+    return { isFollowing, follow }
 }
 
 export default useFollow;

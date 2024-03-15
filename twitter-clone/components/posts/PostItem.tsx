@@ -4,10 +4,11 @@ import { AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineRetweet } from 
 
 import useLoginModel from '@/hooks/useLoginModel';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import useRetweet from '@/hooks/useRetweet';
+import useLike from '@/hooks/useLike';
 
 import Avatar from '../Avatar';
-import useLike from '@/hooks/useLike';
-import useRetweet from '@/hooks/useRetweet';
+
 interface PostItemProps {
   data: Record<string, any>;
   userId?: string;
@@ -19,12 +20,13 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
     const { data: currentUser } = useCurrentUser();
     const { hasLiked, like } = useLike({postId: data.id, userId});
-    const { hasRetweeted, retweet } = useRetweet({postId: data.id, userId});
+    const { hasRetweeted, retweet } = useRetweet({postId: data.id, userId: data.userId});
+    // const { hasRetweeted, retweet } = useRetweet({postId: data.id, userId});
 
     const goToUser = useCallback((event: any) => {
         event.stopPropagation();
-        router.push(`/users/${data.user.id}`)
-    }, [router, data.user.id]);
+        router.push(`/users/${data.user?.id}`)
+    }, [router, data.user?.id]);
 
     const goToPost = useCallback(() => {
         router.push(`/posts/${data.id}`);
@@ -40,7 +42,6 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
     }, [loginModel, currentUser, like]);
 
-    // Filler info for now will redo later
     const onRetweet = useCallback(async (event: any) => {
         event.stopPropagation();
 
@@ -73,7 +74,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
             transition
         ">
         <div className="flex flex-row items-start gap-3">
-            <Avatar userId={data.user.id} />
+            <Avatar userId={data.userId} />
                 <div>
                     <div className="flex flex-row items-center gap-2">
                         <p 
@@ -84,7 +85,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                             cursor-pointer 
                             hover:underline
                         ">
-                        {data.user.name}
+                        {data.user?.name}
                         </p>
                         <span 
                         onClick={goToUser} 
@@ -95,7 +96,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                             hidden
                             md:block
                         ">
-                        @{data.user.username}
+                        @{data.user?.username}
                         </span>
                         <span className="text-neutral-500 text-sm">
                         {createdAt}
@@ -119,7 +120,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                         ">
                             <LikeIcon size={20} color={onLikeColor}/>
                             <p>
-                                {data.likedIds?.length}
+                                {data.likedIds?.length || 0}
                             </p>
                         </div>
                         <div 
@@ -152,7 +153,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                         ">
                             <AiOutlineRetweet size={20} color={onRetweetColor} />
                             <p>
-                                {data.retweets?.length || 0}
+                                {data.retweetedIds?.length || 0}
                             </p>
                         </div>
                     </div>

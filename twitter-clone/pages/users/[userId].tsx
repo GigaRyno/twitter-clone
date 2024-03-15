@@ -11,6 +11,9 @@ const UserView = () => {
     const router = useRouter();
     const { userId } = router.query;
 
+    console.log('UserView - Router: ', router);
+    console.log('UserView - User ID: ', userId);
+
     const { data: fetchedUser, isLoading } = useUser(userId as string);
 
     if(isLoading || !fetchedUser) {

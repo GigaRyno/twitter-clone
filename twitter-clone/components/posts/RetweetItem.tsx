@@ -14,19 +14,24 @@ import useRetweet from '@/hooks/useRetweet';
 interface RetweetItemProps {
   data: Record<string, any>;
   userId?: string;
+  post?: Record<string, any>;
+//   retweetUser: Record<string, any>;
 }
 
-const RetweetItem: React.FC<RetweetItemProps> = ({ data, userId }) => {
+const RetweetItem: React.FC<RetweetItemProps> = ({ data, userId, post }) => {
     const router = useRouter();
     const loginModel = useLoginModel();
 
     const { data: currentUser } = useCurrentUser();
     const { hasLiked, like } = useLike({postId: data.id, userId});
 
+    // console.log("Data: ", data);
+    // console.log("Post: ", post);
+
     const goToUser = useCallback((event: any) => {
         event.stopPropagation();
-        router.push(`/users/${data.user.id}`)
-    }, [router, data.user.id]);
+        router.push(`/users/${data.userId}`)
+    }, [router, data.userId]);
 
     const goToPost = useCallback(() => {
         router.push(`/posts/${data.id}`);
@@ -68,11 +73,11 @@ const RetweetItem: React.FC<RetweetItemProps> = ({ data, userId }) => {
                 <div className='flex flex-col items-end'>
                     <BiRepost size={20} color='#888'/>
                 </div>
-                <Avatar userId={data.user.id}/>
+                <Avatar userId={data.post.user.Avatar}/>
             </div>
                 <div>
                     <div className='flex flex-row items-center gap-2'>
-                        <p className='text-neutral-500 font-bold'>{data.user.name} has reposted</p>
+                        <p className='text-neutral-500 font-bold' onClick={goToUser}>{data.user?.name ? `${data.user?.name} has reposted` : `Loading...`}</p>
                         {/* USERNAME MUST BE REPLACED WITH THE USER THAT RETWEETS IT */}
                     </div>
                     <div className="flex flex-row items-center gap-2">
@@ -84,7 +89,7 @@ const RetweetItem: React.FC<RetweetItemProps> = ({ data, userId }) => {
                             cursor-pointer 
                             hover:underline
                         ">
-                        {data.user.name}
+                        {data.post.user.name}
                         </p>
                         <span 
                         onClick={goToUser} 
@@ -95,7 +100,7 @@ const RetweetItem: React.FC<RetweetItemProps> = ({ data, userId }) => {
                             hidden
                             md:block
                         ">
-                        @{data.user.username}
+                        @{data.post.user.username}
                         </span>
                         <span className='text-neutral-500 font-bold'>
                             ·
@@ -122,7 +127,8 @@ const RetweetItem: React.FC<RetweetItemProps> = ({ data, userId }) => {
                         ">
                             <LikeIcon size={20} color={onLikeColor}/>
                             <p>
-                                {data.likedIds?.length}
+                                {data.likedIds?.length || 0}
+                                {/* {Object.keys(data.likedIds || {}).length} */}
                             </p>
                         </div>
                         <div 
@@ -139,6 +145,7 @@ const RetweetItem: React.FC<RetweetItemProps> = ({ data, userId }) => {
                             <AiOutlineMessage size={20} />
                             <p>
                                 {data.comments?.length || 0}
+                                {/* {Object.keys(data.comments || {}).length} */}
                             </p>
                         </div>
                     </div>
