@@ -34,7 +34,6 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
                     <Button className="w-22 h-9 hover:bg-white hover:bg-opacity-20" profileButton outline label="Edit Profile" onClick={editModel.onOpen} />
                 ) : (
                     <Button 
-                        // className={`${isFollowing ? "hover:bg-red-900 hover:border-red-500 hover:text-red-500 hover:bg-opacity-20 w-[102px] h-9" : ''} w-[84px] h-9`}
                         className={`${isFollowing ? ' w-24 h-9' : 'w-24 h-9'} w-[84px] h-9`}
                         label={isFollowing ? (isHovered ? 'Unfollow' : 'Following') : 'Follow'}
                         secondary={!isFollowing} 

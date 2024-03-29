@@ -104,12 +104,12 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
                     </div>
                     <div className="w-full">
                         <textarea
-                            className="w-full resize-none outline-none bg-black mt-2 text-xl text-white placeholder-neutral-500 peer scrollbar-thin  scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 scrollbar-thumb-rounded-md scrollbar-track-rounded-sm"
+                            className="w-full resize-y outline-none bg-black mt-2 text-xl text-white placeholder-neutral-500 peer scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 scrollbar-thumb-rounded-md scrollbar-track-rounded-sm"
                             placeholder={placeholder}
                             value={body}
                             onChange={(event) => setBody(event.target.value)}
                             maxLength={150}
-                        ></textarea>
+                        />
                         <hr className="
                             opacity-0
                             peer-focus:opacity-100
@@ -143,8 +143,8 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
                 <div className="py-8">
                     <h1 className="text-white text-2xl text-center mb-4 font-bold">Welcome to the Tweeter</h1>
                     <div className="flex flex-row items-center justify-center gap-4">
-                        <Button label="Login" className="w-[90px] h-8" onClick={loginModel.onOpen}/>
-                        <Button label="Register" className="w-[90px] h-9" onClick={registerModel.onOpen} secondary/>
+                        <Button label="Login" onClick={loginModel.onOpen}/>
+                        <Button label="Register" className="h-9" onClick={registerModel.onOpen} secondary/>
                     </div>
                 </div>
             )}

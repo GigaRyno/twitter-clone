@@ -6,9 +6,7 @@ interface ButtonProps {
     fullWidth?: boolean;
     large?: boolean;
     follow?: boolean;
-    bioButton?: boolean;
     itemButton?: boolean;
-    tweetButton?: boolean;
     profileButton?: boolean;
     onClick: () => void;
     disabled?: boolean;
@@ -24,10 +22,8 @@ const Button: React.FC<ButtonProps> = ({
     fullWidth,
     large,
     follow,
-    bioButton,
     profileButton,
     itemButton,
-    tweetButton,
     onClick,
     disabled,
     outline,
@@ -36,8 +32,6 @@ const Button: React.FC<ButtonProps> = ({
     onMouseLeave
     }) => {
     return ( 
-        // ${large ? 'px-5' : 'px-4'}
-        // ${large ? 'py-3' : 'py-2'}
         <button
             disabled={disabled}
             onClick={onClick}
@@ -60,7 +54,7 @@ const Button: React.FC<ButtonProps> = ({
                 ${secondary ? 'border-black' : 'border-sky-500'}
                 ${large ? 'text-xl' : 'text-md'}
                 ${follow ? 'hover:bg-red-900 hover:border-red-500 hover:text-red-500 hover:bg-opacity-25' : ''}
-                ${itemButton ? 'px-3' : 'px-3'}
+                ${itemButton ? 'px-4' : 'px-4'}
                 ${profileButton ? 'w-[104px] h-8' : 'w-[104px] h-8'}
                 ${outline ? 'bg-transparent' : ''}
                 ${outline ? 'border-white' : ''}
