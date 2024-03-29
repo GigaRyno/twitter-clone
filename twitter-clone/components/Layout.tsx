@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "./layout/Sidebar";
-import FollowBar from "./layout/Followbar";
+import FollowBar from "./follow/Followbar";
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({children}) => {
     return (
-        <div className="h-screen bg-neutral-900">
+        <div className="min-h-screen bg-black">
             <div className="container h-full mx-auto xl:px-30 max-w-6xl">
                 <div className="grid grid-cols-4 h-full">
                     <Sidebar/>
