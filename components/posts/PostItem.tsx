@@ -26,9 +26,6 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
     const { hasLiked, like } = useLike({postId: data.id, userId});
     const { hasRetweeted, retweet } = useRetweet({postId: data.id, userId: data.userId});
 
-    // console.log('userId', userId);
-    // console.log('currentuser', currentUser);
-
     const goToUser = useCallback((event: any) => {
         event.stopPropagation();
         router.push(`/users/${data.user?.id}`)
@@ -186,7 +183,8 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                         text-white 
                         font-semibold 
                         cursor-pointer 
-                        hover:underline">
+                        hover:underline"
+                        onClick={goToUser}>
                             {data.user?.name}
                         </div>
                         <div className="
@@ -195,7 +193,8 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                         cursor-pointer
                         hover:underline
                         hidden
-                        md:block">
+                        md:block"
+                        onClick={goToUser}>
                             @{data.user?.username}
                         </div>
                         <span className='text-neutral-500 font-bold'>
