@@ -50,16 +50,17 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
     }, [body, mutatePosts, isComment, postId]);
 
     const getProgressbarStyle = () => {
-        if (body.length > 0 && body.length < 80) {
+        if (body.length > 0 && body.length < 175) {
           return buildStyles({
             rotation: 0,
             strokeLinecap: "butt",
             pathTransitionDuration: 0,
             trailColor: "#2F3336",
             pathColor: "#1D9BF0",
+            textSize: "40px",
           });
         }
-        if (body.length >= 80 && body.length < 100) {
+        if (body.length >= 175 && body.length < 250) {
           return buildStyles({
             rotation: 0,
             strokeLinecap: "butt",
@@ -70,7 +71,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
             pathColor: "#FFD400",
           });
         }
-        if (body.length >= 100) {
+        if (body.length >= 250) {
           return buildStyles({
             rotation: 0,
             strokeLinecap: "butt",
@@ -86,7 +87,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
       useEffect(() => {
         const calculatePercentage = () => {
           const currentLength = body.length;
-          const maxLength = 100;
+          const maxLength = 250;
           const calculatedPercentage = (currentLength / maxLength) * 100;
     
           setPercentage(calculatedPercentage);
@@ -108,7 +109,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
                             placeholder={placeholder}
                             value={body}
                             onChange={(event) => setBody(event.target.value)}
-                            maxLength={150}
+                            maxLength={250}
                         />
                         <hr className="
                             opacity-0
@@ -120,18 +121,18 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
                             "/>
                             <div className="mt-2 flex flex-row justify-end">
                                 <div className="flex items-center px-5 cursor-pointer">
-                                    {body.length > 0 && body.length < 80 && body.trim() ? (
+                                    {body.length > 0 && body.length < 175 && body.trim() ? (
                                         <CircularProgressbar
                                             className="w-5 h-5 ease-in duration-300"
                                             value={percentage}
                                             styles={getProgressbarStyle()}
                                         />
-                                    ) : body.length >= 80 && body.trim() ? (
+                                    ) : body.length >= 175 && body.trim() ? (
                                         <CircularProgressbar
                                             className="w-7 h-7 text-center ease-out duration-300"
                                             value={percentage}
                                             styles={getProgressbarStyle()}
-                                            text={`${100 - body.length}`}
+                                            text={`${250 - body.length}`}
                                         />
                                     ) : null}
                                 </div>
