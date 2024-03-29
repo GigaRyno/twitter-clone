@@ -40,6 +40,7 @@ const Model: React.FC<ModelProps> = ({
 
     return (  
         <>
+            {/* Background Blur */}
             <div className="
                justify-center
                items-center
@@ -54,6 +55,7 @@ const Model: React.FC<ModelProps> = ({
                bg-zinc-900
                bg-opacity-70
             ">
+                {/* Main Box */}
                 <div className="
                     relative
                     w-full
