@@ -55,6 +55,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       return res.status(200).json(posts);
     }
+
+  //   if (req.method === 'DELETE') {
+  //     let deleteRetweet;
+
+  //     const findretweet = await prisma.retweet.findMany({ where: { postId: postId, userId: currentUser.id } });
+
+  //     const originalpost = await prisma.post.findUnique({
+  //       where: { id: postId }
+  //     });
+
+  //     let updatedRetweetIds = [...(originalpost?.retweetedIds || [])];
+
+  //     // Updates retweetIds array by removing the current user's id
+  //     if (updatedRetweetIds.includes(currentUser?.id)) {
+  //       updatedRetweetIds = updatedRetweetIds.filter((retweetedId) => retweetedId !== currentUser?.id);
+  //     }
+
+  //     const updatedPost = await prisma.post.update({
+  //       where: {id: postId},
+  //       data: {retweetedIds: updatedRetweetIds}
+  //     });
+
+  //     // delete the retweet that was created by the user
+  //     deleteRetweet = await prisma.retweet.delete({
+  //       where: {
+  //         id: findretweet[0].id,
+  //         postId: postId,
+  //         userId: currentUser.id
+  //       }
+  //     });
+  //     // res.status(200).json(updatedPost);
+  //     res.status(200).json(deleteRetweet && updatedPost);
+  // }
   } catch (error) {
     console.log(error);
     return res.status(400).end();

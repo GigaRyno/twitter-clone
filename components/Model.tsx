@@ -51,7 +51,7 @@ const Model: React.FC<ModelProps> = ({
                z-50
                outline-none
                focus:outline-none
-               bg-neutral-800
+               bg-zinc-900
                bg-opacity-70
             ">
                 <div className="
@@ -84,7 +84,7 @@ const Model: React.FC<ModelProps> = ({
                             flex
                             items-center
                             justify-between
-                            p-10
+                            px-5 pt-5
                             rounded-t
                         ">
                             <h3 className="text-3xl font-semibold text-white">{title}</h3>
@@ -102,14 +102,15 @@ const Model: React.FC<ModelProps> = ({
                             </button>
                         </div>
                         {/* Body */}
-                        <div className="relative p-10 flex-auto">
+                        <div className="relative p-5 flex-auto bg-black">
                             {body}
                         </div>
                         {/* Footer */}
-                        <div className="flex flex-col gap-2 p-10">
+                        <div className="flex flex-col gap-2 px-5 pb-5 rounded-lg bg-black">
                             <Button 
                                 disabled={disabled}
                                 label={actionLabel}
+                                className="h-[48px]"
                                 secondary
                                 fullWidth
                                 large

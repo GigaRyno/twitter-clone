@@ -10,17 +10,13 @@ import PostFeed from "@/components/posts/PostFeed";
 const UserView = () => {
     const router = useRouter();
     const { userId } = router.query;
-
-    console.log('UserView - Router: ', router);
-    console.log('UserView - User ID: ', userId);
-
     const { data: fetchedUser, isLoading } = useUser(userId as string);
 
     if(isLoading || !fetchedUser) {
         return(
             <div className="
                 flex
-                justify-centers
+                justify-center
                 items-center
                 h-full
             ">
@@ -34,7 +30,7 @@ const UserView = () => {
             <Header showBackButton label={fetchedUser?.name}/>
             <UserHero userId={userId as string}/>
             <UserBio userId={userId as string}/>
-            <PostFeed userId={userId as string}/>
+            <PostFeed userId={userId as string} isProfile={true}/>
         </>
     );
 };

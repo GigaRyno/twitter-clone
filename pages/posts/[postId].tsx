@@ -20,7 +20,7 @@ const PostView = () => {
     )
   }
 
-  return ( 
+  return (
     <>
       <Header showBackButton label="Tweet" />
       <PostItem data={fetchedPost} />

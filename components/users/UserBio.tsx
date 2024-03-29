@@ -3,7 +3,7 @@ import useUser from "@/hooks/useUser";
 import fetcher from "@/libs/fetcher";
 import { format } from "date-fns";
 
-import React, { use, useMemo } from "react";
+import React, { use, useMemo, useState } from "react";
 import Button from "../Button";
 import { BiCalendar } from "react-icons/bi";
 import useEditModel from "@/hooks/useEditModel";
@@ -16,6 +16,7 @@ interface UserBioProps {
 const UserBio: React.FC<UserBioProps> = ({ userId }) => {
     const { data: currentUser } = useCurrentUser();
     const { data: fetchedUser } = useUser(userId);
+    const [isHovered, setIsHovered] = useState(false);
 
     const editModel = useEditModel();
 
@@ -30,13 +31,19 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
         <div className="border-b-[1px] border-neutral-800 pb-4">
             <div className="flex justify-end p-2">
                 {currentUser?.id === userId ? (
-                    <Button secondary label="Edit" onClick={editModel.onOpen} />
+                    <Button className="w-22 h-9 hover:bg-white hover:bg-opacity-20" profileButton outline label="Edit Profile" onClick={editModel.onOpen} />
                 ) : (
                     <Button 
-                        label={isFollowing ? 'Unfollow' : 'Follow'} 
+                        // className={`${isFollowing ? "hover:bg-red-900 hover:border-red-500 hover:text-red-500 hover:bg-opacity-20 w-[102px] h-9" : ''} w-[84px] h-9`}
+                        className={`${isFollowing ? ' w-24 h-9' : 'w-24 h-9'} w-[84px] h-9`}
+                        label={isFollowing ? (isHovered ? 'Unfollow' : 'Following') : 'Follow'}
                         secondary={!isFollowing} 
                         outline={isFollowing} 
-                        onClick={follow} />
+                        onClick={follow}
+                        follow={isFollowing}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                        />
                 )}
             </div>
             <div className="mt-8 px-4">

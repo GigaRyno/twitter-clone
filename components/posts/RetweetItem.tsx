@@ -1,32 +1,42 @@
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
+import { BiRepost } from "react-icons/bi";
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineRetweet } from 'react-icons/ai';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 import useLoginModel from '@/hooks/useLoginModel';
 import useCurrentUser from '@/hooks/useCurrentUser';
-import useRetweet from '@/hooks/useRetweet';
-import useLike from '@/hooks/useLike';
 
 import Avatar from '../Avatar';
+import useLike from '@/hooks/useLike';
+import useRetweet from '@/hooks/useRetweet';
 
-interface PostItemProps {
+interface RetweetItemProps {
   data: Record<string, any>;
   userId?: string;
+  post?: Record<string, any>;
+//   retweetUser: Record<string, any>;
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
+const RetweetItem: React.FC<RetweetItemProps> = ({ data, userId, post }) => {
     const router = useRouter();
     const loginModel = useLoginModel();
 
     const { data: currentUser } = useCurrentUser();
-    const { hasLiked, like } = useLike({postId: data.id, userId});
-    const { hasRetweeted, retweet } = useRetweet({postId: data.id, userId: data.userId});
-    // const { hasRetweeted, retweet } = useRetweet({postId: data.id, userId});
+    const { hasLiked, like } = useLike({postId: data.post.id, userId});
+
+    // console.log("Data: ", data);
+    // console.log("Post: ", post);
 
     const goToUser = useCallback((event: any) => {
         event.stopPropagation();
-        router.push(`/users/${data.user?.id}`)
-    }, [router, data.user?.id]);
+        router.push(`/users/${data.userId}`)
+    }, [router, data.userId]);
+
+    const goToRetweetUser = useCallback((event: any) => {
+        event.stopPropagation();
+        router.push(`/users/${data.post?.userId}`)
+    }, [router, data.post?.userId]);
 
     const goToPost = useCallback(() => {
         router.push(`/posts/${data.id}`);
@@ -42,15 +52,6 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
     }, [loginModel, currentUser, like]);
 
-    const onRetweet = useCallback(async (event: any) => {
-        event.stopPropagation();
-
-        if (!currentUser)
-            return loginModel.onOpen();
-        retweet();
-
-    }, [loginModel, currentUser, retweet]);
-
     const createdAt = useMemo(() => {
         if (!data?.createdAt)
             return null;
@@ -60,7 +61,6 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
     const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
     const onLikeColor = hasLiked ? 'red' : '';
-    const onRetweetColor = hasRetweeted ? 'green' : '';
 
     return (
         <div 
@@ -74,21 +74,30 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
             transition
         ">
         <div className="flex flex-row items-start gap-3">
-            <Avatar userId={data.userId} />
+            <div className='p-1'>
+                <div className='flex flex-col items-end'>
+                    <BiRepost size={20} color='#888'/>
+                </div>
+                <Avatar userId={data.post.userId}/>
+            </div>
                 <div>
+                    <div className='flex flex-row items-center gap-2'>
+                        <p className='text-neutral-500 font-bold' onClick={goToUser}>{data.user?.name ? `${data.user?.name} has reposted` : `Loading...`}</p>
+                        {/* USERNAME MUST BE REPLACED WITH THE USER THAT RETWEETS IT */}
+                    </div>
                     <div className="flex flex-row items-center gap-2">
                         <p 
-                        onClick={goToUser} 
+                        onClick={goToRetweetUser} 
                         className="
                             text-white 
                             font-semibold 
                             cursor-pointer 
                             hover:underline
                         ">
-                        {data.user?.name}
+                        {data.post.user.name}
                         </p>
                         <span 
-                        onClick={goToUser} 
+                        onClick={goToRetweetUser} 
                         className="
                             text-neutral-500
                             cursor-pointer
@@ -96,10 +105,13 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                             hidden
                             md:block
                         ">
-                        @{data.user?.username}
+                        @{data.post.user.username}
+                        </span>
+                        <span className='text-neutral-500 font-bold'>
+                            ·
                         </span>
                         <span className="text-neutral-500 text-sm">
-                        {createdAt}
+                            {createdAt}
                         </span>
                     </div>
                     <div className="text-white mt-1">
@@ -120,7 +132,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                         ">
                             <LikeIcon size={20} color={onLikeColor}/>
                             <p>
-                                {data.likedIds?.length || 0}
+                                {data.post.likedIds?.length || 0}
                             </p>
                         </div>
                         <div 
@@ -136,24 +148,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                         ">
                             <AiOutlineMessage size={20} />
                             <p>
-                                {data.comments?.length || 0}
-                            </p>
-                        </div>
-                        <div
-                            onClick={onRetweet}
-                            className="
-                            flex 
-                            flex-row 
-                            items-center 
-                            text-neutral-500 
-                            gap-2 
-                                cursor-pointer 
-                                transition 
-                                hover:text-green-500
-                        ">
-                            <AiOutlineRetweet size={20} color={onRetweetColor} />
-                            <p>
-                                {data.retweetedIds?.length || 0}
+                                {data.post.comments?.length || 0}
                             </p>
                         </div>
                     </div>
@@ -163,4 +158,4 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
     )
 }
 
-export default PostItem;
+export default RetweetItem;

@@ -104,7 +104,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
                     </div>
                     <div className="w-full">
                         <textarea
-                            className="w-full resize-none outline-none bg-neutral-900 mt-4 text-xl text-white placeholder-neutral-500 peer scrollbar-thin  scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 scrollbar-thumb-rounded-md scrollbar-track-rounded-sm"
+                            className="w-full resize-none outline-none bg-black mt-2 text-xl text-white placeholder-neutral-500 peer scrollbar-thin  scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 scrollbar-thumb-rounded-md scrollbar-track-rounded-sm"
                             placeholder={placeholder}
                             value={body}
                             onChange={(event) => setBody(event.target.value)}
@@ -118,7 +118,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
                             border-neutral-800
                             transition
                             "/>
-                            <div className="mt-4 flex flex-row justify-end">
+                            <div className="mt-2 flex flex-row justify-end">
                                 <div className="flex items-center px-5 cursor-pointer">
                                     {body.length > 0 && body.length < 80 && body.trim() ? (
                                         <CircularProgressbar
@@ -135,7 +135,7 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
                                         />
                                     ) : null}
                                 </div>
-                                <Button disabled={isLoading || !body} label="Tweet" onClick={onSubmit}/>
+                                <Button disabled={isLoading || !body} label="Tweet" className="w-[84px] h-9" onClick={onSubmit}/>
                             </div>
                     </div>
                 </div>
@@ -143,8 +143,8 @@ const Form: React.FC<FormProps> = ({placeholder, isComment, isRetweet, postId}) 
                 <div className="py-8">
                     <h1 className="text-white text-2xl text-center mb-4 font-bold">Welcome to the Tweeter</h1>
                     <div className="flex flex-row items-center justify-center gap-4">
-                        <Button label="Login" onClick={loginModel.onOpen}/>
-                        <Button label="Register" onClick={registerModel.onOpen} secondary/>
+                        <Button label="Login" className="w-[90px] h-8" onClick={loginModel.onOpen}/>
+                        <Button label="Register" className="w-[90px] h-9" onClick={registerModel.onOpen} secondary/>
                     </div>
                 </div>
             )}

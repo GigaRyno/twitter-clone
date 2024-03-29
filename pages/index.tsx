@@ -7,16 +7,11 @@ export default function Home () {
   const router = useRouter();
   const { userId } = router.query;
 
-  console.log('Index - Router: ', router);
-// 
-  console.log('Index - User ID: ', userId);
-
   return (
     <>
       <Header label="Home"/>
       <Form placeholder="What's happening?"/>
       <PostFeed userId={userId as string}/>
-      {/* <PostFeed/> */}
     </>
   )
 }
