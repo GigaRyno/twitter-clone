@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             where: { followingIds: { has: userId } },
         });
 
-        return res.status(200).json({ ... existingUser, followersCount });
+        return res.status(200).json({ ...existingUser, followersCount });
 
     } catch (error) {
         console.log(error);

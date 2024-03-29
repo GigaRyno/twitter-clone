@@ -63,15 +63,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (req.method === 'GET') {
-      // Finds all retweets that the current user has made
-      /* Things to test
-      
-       - Will the retweets show if that are not from the current user {if not fix that lol :)}
-
-      */
       let grabretweets = await prisma.retweet.findMany({
         where: {
-          userId: currentUser?.id,
           postId: postId
         },
         include: {
