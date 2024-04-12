@@ -1,4 +1,4 @@
-Features ✨
+## Features ✨
 - Authentication with OAuth
 - Strongly typed React components with TypeScript
 - Users can add tweets, like, retweet, and reply
@@ -9,7 +9,7 @@ Features ✨
 - Realtime update likes, retweets, and user profile
 - User can edit their profile
   
-Tech 🛠
+## Tech 🛠
 - [Next.js](https://nextjs.org)
 - [Typescript](https://www.typescriptlang.org)
 - [Tailwind CSS](https://tailwindcss.com)
