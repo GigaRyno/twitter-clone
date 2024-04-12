@@ -1,5 +1,5 @@
 Features ✨
-- Authentication with Oauth
+- Authentication with OAuth
 - Strongly typed React components with TypeScript
 - Users can add tweets, like, retweet, and reply
 - Users can delete tweets, add a tweet to bookmarks, and pin their tweet
