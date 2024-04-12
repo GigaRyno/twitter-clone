@@ -22,7 +22,7 @@ Here are the steps to run the project locally.
 
 Clone the repository
 ```
-git clone https://github.com/gigaryno/twitter-clone.git
+[git clone https://github.com/gigaryno/twitter-clone.git](https://github.com/GigaRyno/twitter-clone.git)
 ```
 Install dependencies
 ```
