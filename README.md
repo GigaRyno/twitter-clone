@@ -17,7 +17,7 @@
 - [Prisma](https://www.prisma.io)
 - [React Hot Toast](https://react-hot-toast.com)
 
-Development 💻
+## Development 💻
 Here are the steps to run the project locally.
 
 Clone the repository
