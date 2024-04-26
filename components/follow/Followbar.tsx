@@ -18,13 +18,13 @@ const FollowBar = () => {
   if (currentUser) {
     filteredUsers = users.filter((user: Record<string, any>) => 
         user.id !== currentUser.id &&
-        !currentUser.followingIds.includes(user.id)
+        !currentUser.following.includes(user.id)
     ).slice(0, 3);
   }
 
   const handleShowMore = () => {
     router.push({
-      pathname: '/connect/connect',
+      pathname: '/connect',
     })
   }
 

@@ -23,7 +23,8 @@ model User {
   hashedPassword String?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
-  followingIds String[] @db.ObjectId
+  following String[] @db.ObjectId
+  followers String[] @db.ObjectId
   hasNotifications Boolean?
   posts Post[]
   comments Comment[]

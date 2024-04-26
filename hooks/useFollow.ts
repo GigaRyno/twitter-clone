@@ -12,9 +12,9 @@ const useFollow = (userId: string) => {
     const loginModel = useLoginModel();
 
     const isFollowing = useMemo(() => {
-        const list = currentUser?.followingIds || [];
+        const list = currentUser?.following || [];
         return list.includes(userId);
-    }, [userId, currentUser?.followingIds]);
+    }, [userId, currentUser?.following]);
 
     const follow = useCallback(async () => {
         if(!currentUser)

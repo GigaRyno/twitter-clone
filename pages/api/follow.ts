@@ -18,24 +18,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if(!user)
             throw new Error('Invalid ID');
         
-        let updatedFollowingIds = [...(currentUser.followingIds || [])];
+        let updatedfollowing = [...(currentUser.following || [])];
+        let updatedfollowers = [...(user.followers || [])]
 
         if (req.method === 'POST')
-            updatedFollowingIds.push(userId);  
+            updatedfollowing.push(userId);
+            updatedfollowers.push(userId);
 
         if(req.method === 'DELETE')
-            updatedFollowingIds = updatedFollowingIds.filter((followingId) => followingId !== userId);
+            updatedfollowing = updatedfollowing.filter((followingId) => followingId !== userId);
+            updatedfollowers = updatedfollowers.filter((followerId) => followerId !== userId);
 
         const updatedUser = await prisma.user.update({
             where: {
                 id: currentUser.id
             }, 
             data: {
-                followingIds: updatedFollowingIds
+                following: updatedfollowing
             }
         });
 
-        return res.status(200).json(updatedUser)
+        const updatedFollower = await prisma.user.update({
+            where: {
+                id: user.id
+            }, 
+            data: {
+                followers: updatedfollowers
+            }
+        });
+
+        return res.status(200).json(updatedUser && updatedFollower)
     } catch (err) {
         console.log(err);
         res.status(400).end()

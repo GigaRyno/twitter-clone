@@ -2,7 +2,6 @@ import useFollow from "@/hooks/useFollow";
 import Avatar from "../Avatar";
 import Button from "../Button";
 import { useState } from "react";
-import { is } from "date-fns/locale";
 
 interface FollowUserItemProps {
     user: Record<string, any>;
